@@ -1,13 +1,14 @@
-import { Produto } from './produtos';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { Produto } from './produtos';
 @Injectable({
   providedIn: 'root',
 })
 export class CarrinhoService {
   itens: Produto[] = [];
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   adicionarCarrinho(produto: Produto) {
     this.itens.push(produto);
@@ -19,5 +20,11 @@ export class CarrinhoService {
   limparCarrinho() {
     this.itens = [];
     return this.itens;
+  }
+
+  pegarPrecosEntrega() {
+    return this.http.get<{ tipo: string; preco: number }[]>(
+      '/assets/entrega.json'
+    );
   }
 }
