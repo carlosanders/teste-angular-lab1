@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+
 import { CarrinhoService } from './../carrinho.service';
 
 @Component({
@@ -7,7 +9,22 @@ import { CarrinhoService } from './../carrinho.service';
   styleUrls: ['./carrinho.component.scss'],
 })
 export class CarrinhoComponent {
-  items = this.carrinhoService.pegarItens();
 
-  constructor(private carrinhoService: CarrinhoService) {}
+  itens = this.carrinhoService.pegarItens();
+
+  finalizarForm = this.formBuilder.group({
+    nome: '',
+    endereco: '',
+  });
+
+  constructor(
+    private carrinhoService: CarrinhoService,
+    private formBuilder: FormBuilder
+  ) {}
+
+  onSubmit(): void {
+    this.itens = this.carrinhoService.limparCarrinho();
+    console.warn('Seu pedido foi enviado', this.finalizarForm.value);
+    this.finalizarForm.reset();
+  }
 }
